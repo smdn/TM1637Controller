@@ -1,0 +1,33 @@
+{
+  "name": "TM1637Controller",
+  "description": "A library for TM1637 7-segment LED / dot matrix LED driver.",
+  "version": "1.0.0",
+  "frameworks": "arduino",
+  "platforms": [
+    "atmelavr",
+    "espressif32"
+  ],
+  "license": "MIT",
+  "keywords": "TM1637,OSL40391,led,7segment,dotmatix,display",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/smdn/TM1637Controller"
+  },
+  "homepage": "https://smdn.jp/electronics/TM1637Controller/",
+  "authors": [
+    {
+      "name": "smdn",
+      "url": "https://github.com/smdn/",
+      "maintainer": true
+    }
+  ],
+  "build": {
+    "srcFilter": [
+      "+<*.cpp>",
+      "+<*.h>"
+    ]
+  },
+  "examples": [
+    "examples/*/*.ino"
+  ]
+}
