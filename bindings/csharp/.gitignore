@@ -1,0 +1,7 @@
+Smdn.Devices.TM1637Controller/src/Smdn.Devices.TM1637Controller.Bindings/*
+/build/
+bin/
+obj/
+.vs/
+*.userprefs
+

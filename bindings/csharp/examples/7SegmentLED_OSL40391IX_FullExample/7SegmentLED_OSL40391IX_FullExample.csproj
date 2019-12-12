@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <AssemblyName>7SegmentLED_OSL40391IX_FullExample</AssemblyName>
+    <OutputType>exe</OutputType>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include=" ../../Smdn.Devices.TM1637Controller/src/Smdn.Devices.TM1637Controller.csproj" />
+  </ItemGroup>
+</Project>

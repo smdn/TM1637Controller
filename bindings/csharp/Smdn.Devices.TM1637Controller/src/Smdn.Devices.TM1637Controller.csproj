@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>netcoreapp2.1</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
+    <AssemblyName>Smdn.Devices.TM1637Controller</AssemblyName>
+    <RootNamespace>Smdn.Devices.TM1637Controller</RootNamespace>
+    <VersionPrefix>1.0.0</VersionPrefix>
+    <VersionSuffix></VersionSuffix>
+    <BaseOutputPath>..\build\bin\</BaseOutputPath>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup Label="metadata">
+    <Title>Smdn.Devices.TM1637Controller.dll</Title>
+    <Description>C# wrapper for TM1637Controller, a library for 7-segment LED / dot matrix LED driver.</Description>
+    <Company>smdn:総武ソフトウェア推進所</Company>
+    <Copyright>Copyright © 2019 smdn</Copyright>
+
+    <!-- AssemblyInfo -->
+    <AssemblyVersion>$(Version)</AssemblyVersion>
+    <InformationalVersion>$(VersionPrefix)$(VersionSuffix) ($(TargetFramework))</InformationalVersion>
+    <Product>$(AssemblyName)-$(InformationalVersion)</Product>
+
+    <!-- NuGet -->
+    <Authors>smdn</Authors>
+    <Owners>$(Authors)</Owners>
+    <PackageTags>smdn.jp;raspberry-pi;mono;netframework</PackageTags>
+    <PackageProjectUrl>https://smdn.jp/electronics/TM1637Controller/</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageIconUrl>https://smdn.jp/works/libs/Smdn.dll/Smdn-3.0_64x64.png</PackageIconUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="Smdn.Devices.TM1637Controller.Bindings\libTM1637Controller.so">
+      <Link>libTM1637Controller.so</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <PackageReference Include="System.Memory" Version="4.5.0" />
+  </ItemGroup>
+</Project>
