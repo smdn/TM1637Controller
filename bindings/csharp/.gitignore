@@ -1,4 +1,5 @@
-Smdn.Devices.TM1637Controller/src/Smdn.Devices.TM1637Controller.Bindings/*
+Smdn.Devices.TM1637Controller/src/Smdn.Devices.TM1637Controller.Bindings/*.cs
+Smdn.Devices.TM1637Controller/src/Smdn.Devices.TM1637Controller.Bindings/*.so
 /build/
 bin/
 obj/
