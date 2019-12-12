@@ -15,6 +15,7 @@ SWIG_OUTPUT=TM1637Controller_wrap
 CORE_OBJECTS:=TM1637Controller.o TM1637_7SegmentLEDController_SegmentAddressing.o ${SWIG_OUTPUT}.o
 
 DIR_BINDING_CSHARP=./csharp/Smdn.Devices.TM1637Controller
+DIR_BINDING_CSHARP_SWIG_OUTDIR=${DIR_BINDING_CSHARP}/src/Smdn.Devices.TM1637Controller.Bindings
 
 TM1637Controller.o:
 	${CXX} ${CFLAGS} ${LIB_CFLAGS} -I${DIR_TM1637_INCLUDE} -c ${DIR_TM1637_SOURCE}/TM1637Controller.cpp -o TM1637Controller.o
@@ -40,16 +41,17 @@ clean: clean-binding-csharp
 	rm -f *.o
 
 binding-csharp-lib:
-	swig -csharp -c++ -o ${SWIG_OUTPUT}.cpp -outdir ${DIR_BINDING_CSHARP}/src/Smdn.Devices.TM1637Controller.Bindings/ -dllimport ${LIB_NAME} -namespace 'Smdn.Devices.TM1637Controller.Bindings' ${SWIG_INTERFACE}
+	mkdir -p ${DIR_BINDING_CSHARP_SWIG_OUTDIR}
+	swig -csharp -c++ -o ${SWIG_OUTPUT}.cpp -outdir ${DIR_BINDING_CSHARP_SWIG_OUTDIR} -dllimport ${LIB_NAME} -namespace 'Smdn.Devices.TM1637Controller.Bindings' ${SWIG_INTERFACE}
 	$(MAKE) ${LIB_NAME}.so
-	cp -f ${LIB_NAME}.so ${DIR_BINDING_CSHARP}/src/Smdn.Devices.TM1637Controller.Bindings/
+	cp -f ${LIB_NAME}.so ${DIR_BINDING_CSHARP_SWIG_OUTDIR}
 
 binding-csharp: __find-dotnet binding-csharp-lib
 	${DOTNET_BUILD} ${DIR_BINDING_CSHARP}/src/Smdn.Devices.TM1637Controller.csproj
 
 clean-binding-csharp: __find-dotnet
-	rm -f -r ${DIR_BINDING_CSHARP}/src/Smdn.Devices.TM1637Controller.Bindings/*.cs
-	rm -f -r ${DIR_BINDING_CSHARP}/src/Smdn.Devices.TM1637Controller.Bindings/*.so
+	rm -f -r ${DIR_BINDING_CSHARP_SWIG_OUTDIR}/*.cs
+	rm -f -r ${DIR_BINDING_CSHARP_SWIG_OUTDIR}/*.so
 	rm -f ${LIB_NAME}.so
 	-$(DOTNET_CLEAN) ${DIR_BINDING_CSHARP}/src/Smdn.Devices.TM1637Controller.csproj
 
