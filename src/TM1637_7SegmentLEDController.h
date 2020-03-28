@@ -44,9 +44,6 @@ class TM1637_7SegmentLEDCustomSegmentAddressingController : public TM1637Control
   static_assert(0 < NUM_OF_GRIDS_FOR_USE && NUM_OF_GRIDS_FOR_USE <= TM1637Controller::NUM_OF_GRIDS, "NUM_OF_GRIDS_FOR_USE must be in range of 1~6");
   static_assert(NUM_OF_DIGITS <= NUM_OF_GRIDS_FOR_USE, "NUM_OF_DIGITS must be less than or equals to NUM_OF_GRIDS_FOR_USE");
 
-  protected:
-    static constexpr inline _ATTR_ALWAYS_INLINE_ size_t numberOfGridsForUse() { return NUM_OF_GRIDS_FOR_USE; }
-
   public:
     // XXX: requires <type_traits>
     //using integer_t = std::conditional<5 <= NUM_OF_DIGITS, int_fast32_t, int_fast16_t>::type;
@@ -59,6 +56,7 @@ class TM1637_7SegmentLEDCustomSegmentAddressingController : public TM1637Control
     )
       : TM1637Controller(pinDIO, pinCLK) {}
 
+    static constexpr inline _ATTR_ALWAYS_INLINE_ size_t numberOfGridsForUse() { return NUM_OF_GRIDS_FOR_USE; }
     static constexpr inline _ATTR_ALWAYS_INLINE_ size_t numberOfDigits() { return NUM_OF_DIGITS; }
 
     static constexpr inline _ATTR_ALWAYS_INLINE_ integer_t displayableMaximumInteger() { return (integer_t)pow(10.0, NUM_OF_DIGITS) - 1l; }
@@ -87,6 +85,8 @@ class TM1637_7SegmentLEDCustomSegmentAddressingController : public TM1637Control
     inline _ATTR_ALWAYS_INLINE_ void setDecimalPointAt(const unsigned int digit, const bool trueForOnOtherwiseOff, const bool flush = true);
 
     // operations for entire digits
+    inline _ATTR_ALWAYS_INLINE_ void displaySegmentBits(const uint8_t (&segmentBits)[NUM_OF_GRIDS_FOR_USE], const bool flush = true);
+
     inline _ATTR_ALWAYS_INLINE_ void display(const integer_t value, const bool flush = true);
     inline _ATTR_ALWAYS_INLINE_ void displayZeroPadding(const integer_t value, const bool flush = true);
     inline _ATTR_ALWAYS_INLINE_ void displayHex(const integer_t value, const bool flush = true);
@@ -262,6 +262,19 @@ void TM1637_7SegmentLEDCustomSegmentAddressingController<NUM_OF_DIGITS, NUM_OF_G
 }
 
 
+
+template <size_t NUM_OF_DIGITS, size_t NUM_OF_GRIDS_FOR_USE, typename TSegmentAddressing>
+void TM1637_7SegmentLEDCustomSegmentAddressingController<NUM_OF_DIGITS, NUM_OF_GRIDS_FOR_USE, TSegmentAddressing>::displaySegmentBits(
+  const uint8_t (&segmentBits)[NUM_OF_GRIDS_FOR_USE],
+  const bool flush
+)
+{
+  for (auto grid = 0u; grid < NUM_OF_GRIDS_FOR_USE; grid++)
+    m_segmentBits[grid] = segmentBits[grid];
+
+  if (flush)
+    flushAllGrids();
+}
 
 template <size_t NUM_OF_DIGITS, size_t NUM_OF_GRIDS_FOR_USE, typename TSegmentAddressing>
 void TM1637_7SegmentLEDCustomSegmentAddressingController<NUM_OF_DIGITS, NUM_OF_GRIDS_FOR_USE, TSegmentAddressing>::display(
