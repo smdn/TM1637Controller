@@ -109,6 +109,11 @@ class TM1637_7SegmentLEDCustomSegmentAddressingController : public TM1637Control
     inline _ATTR_ALWAYS_INLINE_ void flushAllGrids();
 
   private:
+    using index_t = unsigned int;
+
+    inline _ATTR_ALWAYS_INLINE_ void writeSegmentBitsUnchecked(const index_t& grid, const uint8_t& segmentBits) { m_segmentBits[grid] = segmentBits; }
+    inline _ATTR_ALWAYS_INLINE_ const uint8_t& readSegmentBitsUnchecked(const index_t& grid) { return m_segmentBits[grid]; }
+
     uint8_t m_segmentBits[NUM_OF_GRIDS_FOR_USE] = {0};
 };
 
@@ -126,7 +131,7 @@ template <size_t NUM_OF_DIGITS, size_t NUM_OF_GRIDS_FOR_USE, typename TSegmentAd
 void TM1637_7SegmentLEDCustomSegmentAddressingController<NUM_OF_DIGITS, NUM_OF_GRIDS_FOR_USE, TSegmentAddressing>::clear(bool flush)
 {
   for (auto grid = 0u; grid < NUM_OF_GRIDS_FOR_USE; grid++)
-    m_segmentBits[grid] = 0b00000000;
+    writeSegmentBitsUnchecked(grid, 0b00000000);
 
   if (flush)
     flushAllGrids();
@@ -136,7 +141,7 @@ template <size_t NUM_OF_DIGITS, size_t NUM_OF_GRIDS_FOR_USE, typename TSegmentAd
 void TM1637_7SegmentLEDCustomSegmentAddressingController<NUM_OF_DIGITS, NUM_OF_GRIDS_FOR_USE, TSegmentAddressing>::clearCharacterSegments(bool flush)
 {
   for (auto grid = 0u; grid < NUM_OF_GRIDS_FOR_USE; grid++)
-    m_segmentBits[grid] &= TSegmentAddressing::SEGMENTBITS_MASK_DECIMALPOINT;
+    writeSegmentBitsUnchecked(grid, readSegmentBitsUnchecked(grid) & TSegmentAddressing::SEGMENTBITS_MASK_DECIMALPOINT);
 
   if (flush)
     flushAllGrids();
@@ -146,7 +151,7 @@ template <size_t NUM_OF_DIGITS, size_t NUM_OF_GRIDS_FOR_USE, typename TSegmentAd
 void TM1637_7SegmentLEDCustomSegmentAddressingController<NUM_OF_DIGITS, NUM_OF_GRIDS_FOR_USE, TSegmentAddressing>::clearDecimalPointSegments(bool flush)
 {
   for (auto grid = 0u; grid < NUM_OF_GRIDS_FOR_USE; grid++)
-    m_segmentBits[grid] &= TSegmentAddressing::SEGMENTBITS_MASK_CHARACTER;
+    writeSegmentBitsUnchecked(grid, readSegmentBitsUnchecked(grid) & TSegmentAddressing::SEGMENTBITS_MASK_CHARACTER);
 
   if (flush)
     flushAllGrids();
@@ -168,10 +173,10 @@ void TM1637_7SegmentLEDCustomSegmentAddressingController<NUM_OF_DIGITS, NUM_OF_G
   if (NUM_OF_GRIDS_FOR_USE <= grid)
     return; // out of range
 
-  m_segmentBits[grid] = segmentBits;
+  writeSegmentBitsUnchecked(grid, segmentBits);
 
   if (flush)
-    this->transferDataToAddressFixed(m_segmentBits[grid], LSBFIRST, grid);
+    this->transferDataToAddressFixed(readSegmentBitsUnchecked(grid), LSBFIRST, grid);
 }
 
 template <size_t NUM_OF_DIGITS, size_t NUM_OF_GRIDS_FOR_USE, typename TSegmentAddressing>
@@ -185,15 +190,16 @@ void TM1637_7SegmentLEDCustomSegmentAddressingController<NUM_OF_DIGITS, NUM_OF_G
   if (NUM_OF_GRIDS_FOR_USE <= grid)
     return; // out of range
 
-  if (trueForOnOtherwiseOff)
-    m_segmentBits[grid] |= segmentBits;
-  else
-    m_segmentBits[grid] &= ~segmentBits;
+  writeSegmentBitsUnchecked(
+    grid,
+    trueForOnOtherwiseOff
+      ? readSegmentBitsUnchecked(grid) | segmentBits
+      : readSegmentBitsUnchecked(grid) & ~segmentBits
+  );
 
   if (flush)
-    this->transferDataToAddressFixed(m_segmentBits[grid], LSBFIRST, grid);
+    this->transferDataToAddressFixed(readSegmentBitsUnchecked(grid), LSBFIRST, grid);
 }
-
 
 template <size_t NUM_OF_DIGITS, size_t NUM_OF_GRIDS_FOR_USE, typename TSegmentAddressing>
 void TM1637_7SegmentLEDCustomSegmentAddressingController<NUM_OF_DIGITS, NUM_OF_GRIDS_FOR_USE, TSegmentAddressing>::setSegmentBitsAt(
@@ -205,10 +211,10 @@ void TM1637_7SegmentLEDCustomSegmentAddressingController<NUM_OF_DIGITS, NUM_OF_G
   if (NUM_OF_DIGITS <= digit)
     return; // out of range
 
-  m_segmentBits[digit] = segmentBits;
+  writeSegmentBitsUnchecked(digit, segmentBits);
 
   if (flush)
-    this->transferDataToAddressFixed(m_segmentBits[digit], LSBFIRST, digit);
+    this->transferDataToAddressFixed(readSegmentBitsUnchecked(digit), LSBFIRST, digit);
 }
 
 template <size_t NUM_OF_DIGITS, size_t NUM_OF_GRIDS_FOR_USE, typename TSegmentAddressing>
@@ -232,10 +238,16 @@ void TM1637_7SegmentLEDCustomSegmentAddressingController<NUM_OF_DIGITS, NUM_OF_G
   const bool flush
 )
 {
+  if (NUM_OF_DIGITS <= digit)
+    return; // out of range
   if (10 <= decimalNumber)
     return; // out of range
 
-  setSegmentBitsAt(digit, (m_segmentBits[digit] & TSegmentAddressing::SEGMENTBITS_MASK_DECIMALPOINT) | TSegmentAddressing::CHARS_HEXADECIMALS[decimalNumber], flush);
+  setSegmentBitsAt(
+    digit,
+    (readSegmentBitsUnchecked(digit) & TSegmentAddressing::SEGMENTBITS_MASK_DECIMALPOINT) | TSegmentAddressing::CHARS_HEXADECIMALS[decimalNumber],
+    flush
+  );
 }
 
 template <size_t NUM_OF_DIGITS, size_t NUM_OF_GRIDS_FOR_USE, typename TSegmentAddressing>
@@ -245,10 +257,16 @@ void TM1637_7SegmentLEDCustomSegmentAddressingController<NUM_OF_DIGITS, NUM_OF_G
   const bool flush
 )
 {
+  if (NUM_OF_DIGITS <= digit)
+    return; // out of range
   if (0x10 <= hexadecimalNumber)
     return; // out of range
 
-  setSegmentBitsAt(digit, (m_segmentBits[digit] & TSegmentAddressing::SEGMENTBITS_MASK_DECIMALPOINT) | TSegmentAddressing::CHARS_HEXADECIMALS[hexadecimalNumber], flush);
+  setSegmentBitsAt(
+    digit,
+    (readSegmentBitsUnchecked(digit) & TSegmentAddressing::SEGMENTBITS_MASK_DECIMALPOINT) | TSegmentAddressing::CHARS_HEXADECIMALS[hexadecimalNumber],
+    flush
+  );
 }
 
 template <size_t NUM_OF_DIGITS, size_t NUM_OF_GRIDS_FOR_USE, typename TSegmentAddressing>
@@ -270,7 +288,7 @@ void TM1637_7SegmentLEDCustomSegmentAddressingController<NUM_OF_DIGITS, NUM_OF_G
 )
 {
   for (auto grid = 0u; grid < NUM_OF_GRIDS_FOR_USE; grid++)
-    m_segmentBits[grid] = segmentBits[grid];
+    writeSegmentBitsUnchecked(grid, segmentBits[grid]);
 
   if (flush)
     flushAllGrids();
