@@ -35,8 +35,8 @@ auto display = TM1637_7SegmentLEDController<6 /* The number of digits of 7 segme
   PIN_CLK,
   //By detault you do not need the array specified below. This array allows you to rearrange digits on the 7-segment display. 
   //Rearranging digits may be needed as some manufatures of the display do not wire them up the same as the library is expecting.  
-  //For example a company that produces a 6 digit 7-segment display when you perform a display.displayNumericalString("123456"); 
-  //the screen will actually display 321654. There are 2 ways to fix this, 1 rewire the 7 segment display if you're using a breadboard
+  //For example a company that produces  a display as described above, when you perform a display.displayNumericalString("123456"); 
+  //the screen may actually display 321654. There are 2 ways to fix this, 1 rewire the 7 segment display if you're using a breadboard
   //if you're using a purchased module then there is nothing you can do in this case. 
   //2nd option is to use the array below to correct for wiring differences. From the example above you would write the array as shown 
   //below to make it display "123456"
