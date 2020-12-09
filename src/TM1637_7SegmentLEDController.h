@@ -121,7 +121,7 @@ class TM1637_7SegmentLEDCustomSegmentAddressingController : public TM1637Control
     inline _ATTR_ALWAYS_INLINE_ const uint8_t& readSegmentBitsUnchecked(const index_t& grid) { return m_segmentBits[getGrid(grid)]; }
 
     /*const*/ index_t m_gridsOrder[NUM_OF_GRIDS];
-    uint8_t m_segmentBits[NUM_OF_GRIDS_FOR_USE] = {0};
+    uint8_t m_segmentBits[NUM_OF_GRIDS] = {0};
 };
 
 template <size_t NUM_OF_DIGITS>
@@ -192,7 +192,7 @@ void TM1637_7SegmentLEDCustomSegmentAddressingController<NUM_OF_DIGITS, NUM_OF_G
 template <size_t NUM_OF_DIGITS, size_t NUM_OF_GRIDS_FOR_USE, typename TSegmentAddressing>
 void TM1637_7SegmentLEDCustomSegmentAddressingController<NUM_OF_DIGITS, NUM_OF_GRIDS_FOR_USE, TSegmentAddressing>::flushAllGrids()
 {
-  this->transferDataToAddressAutomatic(m_segmentBits, NUM_OF_GRIDS_FOR_USE, LSBFIRST, 0);
+  this->transferDataToAddressAutomatic(m_segmentBits, NUM_OF_GRIDS, LSBFIRST, 0);
 }
 
 template <size_t NUM_OF_DIGITS, size_t NUM_OF_GRIDS_FOR_USE, typename TSegmentAddressing>
