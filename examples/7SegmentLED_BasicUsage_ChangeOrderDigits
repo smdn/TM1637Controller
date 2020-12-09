@@ -33,7 +33,7 @@
 auto display = TM1637_7SegmentLEDController<6 /* The number of digits of 7 segment display */>(
   PIN_DIO,
   PIN_CLK,
-   {2, 1, 0, 5, 4, 3}// change order of digits, default is  {0, 1, 2, 3, 4, 5}
+  {2, 1, 0, 5, 4, 3} // change order of digits, default is  {0, 1, 2, 3, 4, 5}
 );
 
 // equivalent to the expression above
