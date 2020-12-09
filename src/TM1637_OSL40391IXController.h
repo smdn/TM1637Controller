@@ -47,7 +47,7 @@ class TM1637_OSL40391IXCustomSegmentAddressingController
     TM1637_OSL40391IXCustomSegmentAddressingController(
       uint8_t pinDIO,
       uint8_t pinCLK,
-      const unsigned int (&gridsOrder)[NUM_OF_GRIDS]
+      const unsigned int (&gridsOrder)[TM1637Controller::NUM_OF_GRIDS]
     )
       : TM1637_4Digit5Grid7SegmentLEDCustomSegmentAddressingController<TSegmentAddressing>(pinDIO, pinCLK, gridsOrder) {}
 
