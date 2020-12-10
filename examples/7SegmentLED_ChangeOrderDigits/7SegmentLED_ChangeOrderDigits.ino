@@ -70,35 +70,18 @@ void loop()
 
   Serial.println("display integer");
 
-  display.display((int32_t)1); delay(500);
-  display.display((int32_t)12); delay(500);
-  display.display((int32_t)123); delay(500);
-  display.display((int32_t)-1); delay(500);
-  display.display((int32_t)-12); delay(500);
-  display.display((int32_t)-123); delay(500);
+  display.display((int32_t)123456); delay(1000);
 
   Serial.println("display hex integer");
 
-  display.displayHex((int32_t)0xA); delay(500);
-  display.displayHex((int32_t)0xAB); delay(500);
-  display.displayHex((int32_t)0xABC); delay(500);
+  display.displayHex((int32_t)0xABCDEF); delay(1000);
 
   Serial.println("display floating point");
 
-  display.display(3.14f); delay(500);
-  display.display(3.141f); delay(500);
-  display.display(3.1415f); delay(500);
+  display.display(123.456f); delay(1000);
 
   Serial.println("display string-expressed numerical values");
 
-  display.displayNumericalString("123"); delay(1000);
-  display.displayNumericalString("-123"); delay(1000);
-
-  display.displayNumericalString("1.23"); delay(1000);
-  display.displayNumericalString("-1.23"); delay(1000);
-
-  display.displayNumericalString("12-31"); delay(1000);
-
-  display.displayNumericalString("CAFE"); delay(1000);
+  display.displayNumericalString("12.34.56."); delay(1000);
   display.displayNumericalString("-C.A.F.E.-"); delay(1000);
 }
