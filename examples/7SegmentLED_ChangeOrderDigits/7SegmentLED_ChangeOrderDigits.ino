@@ -47,7 +47,8 @@ auto display = TM1637_7SegmentLEDController<6 /* The number of digits of 7 segme
 /*
 auto display = TM1637_6Digit7SegmentLEDController(
   PIN_DIO,
-  PIN_CLK
+  PIN_CLK,
+  {2, 1, 0, 5, 4, 3}
 );
 */
 
