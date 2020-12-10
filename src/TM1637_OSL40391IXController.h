@@ -44,6 +44,13 @@ class TM1637_OSL40391IXCustomSegmentAddressingController
     )
       : TM1637_4Digit5Grid7SegmentLEDCustomSegmentAddressingController<TSegmentAddressing>(pinDIO, pinCLK) {}
 
+    TM1637_OSL40391IXCustomSegmentAddressingController(
+      uint8_t pinDIO,
+      uint8_t pinCLK,
+      const unsigned int (&gridsOrder)[TM1637Controller::NUM_OF_GRIDS]
+    )
+      : TM1637_4Digit5Grid7SegmentLEDCustomSegmentAddressingController<TSegmentAddressing>(pinDIO, pinCLK, gridsOrder) {}
+
     inline _ATTR_ALWAYS_INLINE_ void setColonOn(const bool flush = true) { setColon(true, flush); }
     inline _ATTR_ALWAYS_INLINE_ void setColonOff(const bool flush = true) { setColon(false, flush); }
     inline _ATTR_ALWAYS_INLINE_ void setColon(const bool trueForOnOtherwiseOff, const bool flush = true) { this->switchSegmentBitsAtGrid(gridForDots(), TSegmentAddressing::SEGMENTBITS_COLON, trueForOnOtherwiseOff, flush); }
