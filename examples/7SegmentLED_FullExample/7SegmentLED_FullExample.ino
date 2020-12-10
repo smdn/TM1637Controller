@@ -206,6 +206,23 @@ void loop()
   display.display((float)NAN);
   delay(1000);
 
+  Serial.println("display custom characters");
+
+  for (auto i = 0; i < 5; i++) {
+    display.displaySegmentBits({
+      0b01110110, // H
+      0b01111001, // E
+      0b00111000, // L
+      0b00111000, // L
+      0b01011100, // o
+      0b10000110, // 1. (!)
+    });
+    delay(500);
+
+    display.clear();
+    delay(500);
+  }
+
   Serial.println("display decimal point per digit");
 
   for (auto digit = 0u; digit < display.numberOfDigits(); digit++) {
