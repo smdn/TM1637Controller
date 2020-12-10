@@ -5,6 +5,7 @@
   "frameworks": "arduino",
   "platforms": [
     "atmelavr",
+    "atmelmegaavr",
     "espressif32"
   ],
   "license": "MIT",
